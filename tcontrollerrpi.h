@@ -6,7 +6,7 @@
 #include <QAbstractSocket>
 #include <QHostAddress>
 #include <QWebSocket>
-//#include <QTimer>
+#include <QTimer>
 #include <QSettings>
 
 QT_FORWARD_DECLARE_CLASS(QWebSocket)
@@ -17,6 +17,7 @@ QT_FORWARD_DECLARE_CLASS(ServerDiscoverer)
 QT_FORWARD_DECLARE_CLASS(QUdpSocket)
 QT_FORWARD_DECLARE_CLASS(ClientListDialog)
 QT_FORWARD_DECLARE_CLASS(MCP4725)
+QT_FORWARD_DECLARE_CLASS(ADS1115)
 
 
 namespace Ui {
@@ -43,7 +44,7 @@ private slots:
   void onClientDisconnected();
   void onPanelServerError(QWebSocketProtocol::CloseCode closeCode);
   void onNewPanelServerConnection();
-//  void onTimeToUpdate();
+  void onTimeToUpdate();
 
 protected:
   void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
@@ -81,6 +82,8 @@ private:
   double                percentage;
   double                commandVoltage;
 
+  ADS1115*             pADC;
+
   QFile                *logFile;
   QWebSocket           *pServerSocket;
   QWebSocketServer     *pPanelServer;
@@ -96,7 +99,7 @@ private:
   QString               logFileName;
   QList<connection>     connectionList;
 
-//  QTimer                updateTimer;
+  QTimer                updateTimer;
 
 };
 

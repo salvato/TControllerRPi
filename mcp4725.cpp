@@ -18,12 +18,12 @@ int
 MCP4725::Initialize() {
     // open device on /dev/i2c-1
     if((fd = open(i2cBus.toLatin1(), O_RDWR)) < 0) {
-      printf("Error: Couldn't open device! %d\n", fd);
+      printf("MCP4725 Error: Couldn't open device! %d\n", fd);
       return -1;
     }
-    // connect to ads1115 as i2c slave
+    // connect to MCP4725 as i2c slave
     if(ioctl(fd, I2C_SLAVE, mcp4725_address) < 0) {
-      printf("Error: Couldn't find device on address!\n");
+      printf("Error: Couldn't find MCP4725 on address!\n");
       return -1;
     }
     return 0;

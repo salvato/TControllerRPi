@@ -3,6 +3,8 @@
 #include "utility.h"
 #include "clientlistdialog.h"
 #include "mcp4725.h"
+#include "ads1115.h"
+
 
 
 #include <QNetworkInterface>
@@ -69,12 +71,13 @@ TControllerRPi::TControllerRPi(QWidget *parent) :
     // Prepare the server for Remote Control
     prepareServer();
 
-//    connect(&updateTimer, SIGNAL(timeout()),
-//            this, SLOT(onTimeToUpdate()));
-//    updateTimer.start(100);
+    connect(&updateTimer, SIGNAL(timeout()),
+            this, SLOT(onTimeToUpdate()));
+    updateTimer.start(100);
 
     // Start the DAQ Tasks
     pDAC = new MCP4725(QString("/dev/i2c-1"), 0x60);
+    pADC = new ADS1115(QString("/dev/i2c-1"), 0x48);
     startDAQ();
 }
 
@@ -170,13 +173,15 @@ TControllerRPi::onPanelServerError(QWebSocketProtocol::CloseCode closeCode){
 }
 
 
-//void
-//TControllerRPi::onTimeToUpdate() {
-//  if(!connectionList.isEmpty()) {
-//    sString = QString("<readPercent>%1</readPercent>").arg(ui->powerPercentageReadEdit->text());
-//    sendToAll(sString);
-//  }
-//}
+void
+TControllerRPi::onTimeToUpdate() {
+    double readPercent = pADC->ReadData();
+    ui->powerPercentageReadEdit->setText(QString("%1").arg(readPercent*100.0, 0, 'f', 1));
+    if(!connectionList.isEmpty()) {
+    sString = QString("<readPercent>%1</readPercent>").arg(ui->powerPercentageReadEdit->text());
+    sendToAll(sString);
+  }
+}
 
 
 void
@@ -256,7 +261,15 @@ TControllerRPi::startDAQ() {
 #ifdef LOG_MESG
         logMessage(logFile,
                    sFunctionName,
-                   QString("Unable to initialize the DA Converter"));
+                   QString("Unable to initialize the D to A Converter"));
+#endif
+        exit(-1);
+    }
+    if(pADC->Initialize()) {
+#ifdef LOG_MESG
+        logMessage(logFile,
+                   sFunctionName,
+                   QString("Unable to initialize the A to D Converter"));
 #endif
         exit(-1);
     }

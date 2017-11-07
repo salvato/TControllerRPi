@@ -15,13 +15,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    mcp4725.cpp
+    mcp4725.cpp \
+    ads1115.cpp
 SOURCES += tcontrollerrpi.cpp
 SOURCES += clientlistdialog.cpp
 SOURCES += utility.cpp
 
 HEADERS += tcontrollerrpi.h \
-    mcp4725.h
+    mcp4725.h \
+    ads1115.h
 HEADERS += clientlistdialog.h
 HEADERS += utility.h
 
