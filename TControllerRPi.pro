@@ -13,17 +13,19 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = TControllerRPi
 TEMPLATE = app
 
+CONFIG += c++11
 
-SOURCES += main.cpp \
-    mcp4725.cpp \
-    ads1115.cpp
+
+SOURCES += main.cpp
+SOURCES += mcp4725.cpp
+SOURCES += ads1115.cpp
 SOURCES += tcontrollerrpi.cpp
 SOURCES += clientlistdialog.cpp
 SOURCES += utility.cpp
 
-HEADERS += tcontrollerrpi.h \
-    mcp4725.h \
-    ads1115.h
+HEADERS += tcontrollerrpi.h
+HEADERS += mcp4725.h
+HEADERS += ads1115.h
 HEADERS += clientlistdialog.h
 HEADERS += utility.h
 
